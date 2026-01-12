@@ -34,8 +34,8 @@ python3 -m http.server 8000
 #### Search and Replace:
 ```bash
 # Replace placeholder text in index.html
-# LinkedIn: yourusername → your-actual-linkedin-username
-# GitHub: yourusername → your-actual-github-username
+# LinkedIn: HectorHernandez1 → your-actual-linkedin-username
+# GitHub: HectorHernandez1 → your-actual-github-username
 ```
 
 ### 3. Add Your Resume (5 minutes)
@@ -54,16 +54,16 @@ git init
 git add .
 git commit -m "Initial portfolio website"
 
-# Create repository on GitHub named: yourusername.github.io
+# Create repository on GitHub named: HectorHernandez1.github.io
 
 # Connect and push
-git remote add origin https://github.com/yourusername/yourusername.github.io.git
+git remote add origin https://github.com/HectorHernandez1/HectorHernandez1.github.io.git
 git branch -M main
 git push -u origin main
 
 # Enable GitHub Pages in repository Settings → Pages
 # Select: main branch, / (root) folder
-# Your site will be live at: https://yourusername.github.io/
+# Your site will be live at: https://HectorHernandez1.github.io/
 ```
 
 See `DEPLOYMENT.md` for detailed instructions.

@@ -32,7 +32,7 @@ If you haven't already created a repository:
 1. Go to https://github.com
 2. Click the "+" icon in the top right
 3. Select "New repository"
-4. **Important**: Name it `yourusername.github.io` (replace with your GitHub username)
+4. **Important**: Name it `HectorHernandez1.github.io` (replace with your GitHub username)
    - Example: If your username is "hectorh", name it `hectorh.github.io`
    - This creates a user site that will be accessible at `https://hectorh.github.io`
 5. **Do NOT** initialize with README, .gitignore, or license (we already have these)
@@ -42,7 +42,7 @@ If you haven't already created a repository:
 
 ```bash
 # Add GitHub remote (replace with your repository URL)
-git remote add origin https://github.com/yourusername/yourusername.github.io.git
+git remote add origin https://github.com/HectorHernandez1/HectorHernandez1.github.io.git
 
 # Verify remote was added
 git remote -v
@@ -66,18 +66,18 @@ git push -u origin main
 
 - GitHub will build and deploy your site
 - This usually takes 1-2 minutes
-- You'll see a message: "Your site is ready to be published at `https://yourusername.github.io/`"
+- You'll see a message: "Your site is ready to be published at `https://HectorHernandez1.github.io/`"
 - Refresh the page after a minute to see: "Your site is published at..."
 
 ### 6. Verify Deployment
 
-Visit your site at: `https://yourusername.github.io/`
+Visit your site at: `https://HectorHernandez1.github.io/`
 
 ## Alternative: Project Repository (Not User Site)
 
-If you named your repository something other than `yourusername.github.io`:
+If you named your repository something other than `HectorHernandez1.github.io`:
 
-1. Your site will be at: `https://yourusername.github.io/repository-name/`
+1. Your site will be at: `https://HectorHernandez1.github.io/repository-name/`
 2. **Important**: You'll need to update paths in your HTML:
    - Change `href="css/style.css"` to `href="/repository-name/css/style.css"`
    - Update all asset paths accordingly
@@ -114,7 +114,7 @@ If you named your repository something other than `yourusername.github.io`:
 
    Type: CNAME
    Host: www
-   Value: yourusername.github.io
+   Value: HectorHernandez1.github.io
    ```
 
 3. **Add custom domain to GitHub**:

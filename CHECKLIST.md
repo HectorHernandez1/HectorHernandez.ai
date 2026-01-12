@@ -51,7 +51,7 @@ Use this checklist to ensure your portfolio is ready for deployment and job appl
   git init
   git add .
   git commit -m "Initial portfolio website"
-  git remote add origin https://github.com/yourusername/yourusername.github.io.git
+  git remote add origin https://github.com/HectorHernandez1/HectorHernandez.ai.git
   git branch -M main
   git push -u origin main
   ```
@@ -67,7 +67,7 @@ Use this checklist to ensure your portfolio is ready for deployment and job appl
   - [ ] Click "Save"
 
 - [ ] **Verify deployment** (wait 2-3 minutes)
-  - [ ] Visit `https://yourusername.github.io`
+  - [ ] Visit `https://hectorhernandez1.github.io/HectorHernandez.ai/`
   - [ ] Site loads correctly
   - [ ] All sections work
   - [ ] Images load (or placeholders appear)
@@ -147,8 +147,8 @@ Use this checklist to ensure your portfolio is ready for deployment and job appl
   ```html
   <meta property="og:title" content="Hector Hernandez | Backend Engineer">
   <meta property="og:description" content="Backend engineer specializing in data pipelines and ETL systems">
-  <meta property="og:image" content="https://yourusername.github.io/images/og-image.jpg">
-  <meta property="og:url" content="https://yourusername.github.io">
+  <meta property="og:image" content="https://hectorhernandez1.github.io/HectorHernandez.ai/images/og-image.jpg">
+  <meta property="og:url" content="https://hectorhernandez1.github.io/HectorHernandez.ai/">
   ```
 
 ## Phase 5: Projects Development (Ongoing)
