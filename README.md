@@ -59,7 +59,7 @@ portfolio-website/
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/HectorHernandez.ai.git
+   git clone https://github.com/HectorHernandez1/HectorHernandez.ai.git
    cd HectorHernandez.ai
    ```
 
@@ -101,7 +101,7 @@ portfolio-website/
    - Select "main" branch as source
    - Click "Save"
 
-3. Your site will be live at: `https://yourusername.github.io/HectorHernandez.ai/`
+3. Your site will be live at: `https://HectorHernandez1.github.io/HectorHernandez.ai/`
 
 ## Customization
 
@@ -194,7 +194,7 @@ The portfolio includes placeholders for 6 projects. Consider building:
    <?xml version="1.0" encoding="UTF-8"?>
    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
      <url>
-       <loc>https://yourusername.github.io/</loc>
+       <loc>https://HectorHernandez1.github.io/</loc>
        <lastmod>2026-01-11</lastmod>
        <priority>1.0</priority>
      </url>
@@ -205,7 +205,7 @@ The portfolio includes placeholders for 6 projects. Consider building:
    ```
    User-agent: *
    Allow: /
-   Sitemap: https://yourusername.github.io/sitemap.xml
+   Sitemap: https://HectorHernandez1.github.io/sitemap.xml
    ```
 
 ### Performance Optimization
@@ -248,8 +248,8 @@ This project is open source and available for personal use.
 
 Hector Hernandez
 - Email: hhhector9@gmail.com
-- LinkedIn: [Your LinkedIn Profile]
-- GitHub: [Your GitHub Profile]
+- LinkedIn: [linkedin.com/in/hector-hernandez-55600191](https://www.linkedin.com/in/hector-hernandez-55600191/)
+- GitHub: [github.com/HectorHernandez1](https://github.com/HectorHernandez1)
 - Location: Chandler, AZ
 
 ---
