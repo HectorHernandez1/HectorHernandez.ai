@@ -4,7 +4,7 @@ Use this checklist to ensure your portfolio is ready for deployment and job appl
 
 ---
 
-## ✅ Current Status (As of January 11, 2026)
+## ✅ Current Status (As of January 14, 2026)
 
 **Completed:**
 - ✅ Portfolio website built and pushed to GitHub
@@ -13,14 +13,17 @@ Use this checklist to ensure your portfolio is ready for deployment and job appl
 - ✅ All documentation updated with actual URLs
 - ✅ Repository live at: https://github.com/HectorHernandez1/HectorHernandez.ai
 - ✅ Security audit passed - safe for public deployment
+- ✅ Added PersonalFinanceHub project
+- ✅ Added Wedding Website project (React, FastAPI, PostgreSQL)
+- ✅ Added Money Review Page project
+- ✅ Added LeetCode Practice project
 
 **Next Steps:**
 1. **Enable GitHub Pages** (5 minutes) - Make portfolio live
-2. **Build portfolio projects** (ongoing) - Fill in the 6 featured projects
-3. **Add resume PDF** (when ready)
-4. **Get custom domain** (optional, recommended after projects are built)
+2. ~~**Add resume PDF**~~ ✅ Added (docs/Hector_Hernandez_Resume.pdf)
+3. **Get custom domain** (optional, recommended)
 
-**Current Focus:** Building the 6 portfolio projects to showcase backend engineering skills
+**Current Focus:** 4 of 6 portfolio projects are now real projects with GitHub links
 
 ---
 
@@ -175,45 +178,41 @@ Use this checklist to ensure your portfolio is ready for deployment and job appl
 
 ## Phase 5: Projects Development (Ongoing)
 
-### Build Portfolio Projects
+### Portfolio Projects Status
 
-Priority order (build in this sequence):
+**Completed Projects (with GitHub links):**
 
-1. - [ ] **High-Performance ETL Pipeline**
-   - [ ] Build with Python, Airflow, PostgreSQL, Docker
-   - [ ] Add to GitHub
-   - [ ] Update portfolio with link
-   - [ ] Add screenshot
+1. - [x] **PersonalFinanceHub**
+   - [x] AI-powered finance tool with OpenAI GPT
+   - [x] GitHub link: https://github.com/HectorHernandez1/PersonalFinanceHub
+   - [x] Added to portfolio with screenshot
 
-2. - [ ] **REST API with Advanced Features**
+2. - [x] **Wedding Website**
+   - [x] Bilingual React site with RSVP system
+   - [x] GitHub link: https://github.com/HectorHernandez1/WeddingPage
+   - [x] Added to portfolio with screenshot
+
+3. - [x] **Money Review Page**
+   - [x] Budget dashboard with D3.js visualizations
+   - [x] GitHub link: https://github.com/HectorHernandez1/MoneyReviewPage
+   - [x] Added to portfolio with screenshot
+
+4. - [x] **LeetCode Practice**
+   - [x] Daily algorithm practice repository
+   - [x] GitHub link: https://github.com/HectorHernandez1/LeetCodePractice
+   - [x] Added to portfolio with screenshot
+
+**Placeholder Projects (to be built):**
+
+5. - [ ] **REST API with Advanced Features**
    - [ ] Build with FastAPI, PostgreSQL, Redis
    - [ ] Deploy demo
    - [ ] Update portfolio with links
-   - [ ] Add screenshot
 
-3. - [ ] **Real-Time Data Dashboard**
-   - [ ] Build with Python, React, WebSockets, D3.js
-   - [ ] Deploy demo
-   - [ ] Update portfolio
-   - [ ] Add screenshot
-
-4. - [ ] **Database Performance Analyzer**
+6. - [ ] **Database Performance Analyzer**
    - [ ] Build tool in Python
    - [ ] Add to GitHub
    - [ ] Update portfolio
-   - [ ] Add screenshot
-
-5. - [ ] **Distributed System Implementation**
-   - [ ] Complete academic project
-   - [ ] Document in README
-   - [ ] Update portfolio
-   - [ ] Add architecture diagram
-
-6. - [ ] **ML Model Deployment Pipeline**
-   - [ ] Build MLOps workflow
-   - [ ] Deploy demo
-   - [ ] Update portfolio
-   - [ ] Add screenshot
 
 ## Phase 6: Launch & Promotion
 

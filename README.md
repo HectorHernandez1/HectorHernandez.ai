@@ -23,7 +23,7 @@ This is a modern, responsive portfolio website built with HTML5, CSS3, and JavaS
 3. **Technical Skills** - Categorized skill sets with visual tags
 4. **Education** - Academic credentials in timeline format
 5. **Professional Experience** - Detailed work history with achievements
-6. **Projects** - Featured projects with technology stacks (placeholder)
+6. **Projects** - Featured projects with technology stacks
 7. **Contact** - Contact form and social media links
 
 ## Technology Stack
@@ -170,16 +170,16 @@ To integrate Formspree:
 4. **Profile Photo** - Optional: Add a professional headshot to the About section
 5. **Social Media** - Update all social media links with your actual profiles
 
-### Projects to Build
+### Current Projects
 
-The portfolio includes placeholders for 6 projects. Consider building:
+The portfolio showcases the following projects:
 
-1. **High-Performance ETL Pipeline** - Airflow + Docker + PostgreSQL
-2. **REST API with Advanced Features** - FastAPI + JWT + Redis
-3. **Real-Time Data Dashboard** - WebSockets + React + D3.js
-4. **Database Performance Analyzer** - SQL optimization tool
-5. **Distributed System** - Academic project showcase
-6. **ML Model Deployment** - MLOps pipeline
+1. **PersonalFinanceHub** - AI-powered finance tool with OpenAI GPT categorization (Python, PostgreSQL, FastAPI)
+2. **Wedding Website** - Bilingual wedding site with RSVP system (React, FastAPI, PostgreSQL, Tailwind)
+3. **Money Review Page** - Budget dashboard with D3.js visualizations (FastAPI, React, D3.js, PostgreSQL)
+4. **REST API with Advanced Features** - Enterprise patterns with auth and caching (FastAPI, PostgreSQL, Redis)
+5. **Database Performance Analyzer** - Query optimization tool (Python, SQL, PostgreSQL)
+6. **LeetCode Practice** - Daily algorithm practice with solutions (Python, Algorithms, Data Structures)
 
 ### SEO Optimization
 
