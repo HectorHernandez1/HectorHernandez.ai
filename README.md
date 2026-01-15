@@ -178,7 +178,7 @@ The portfolio showcases the following projects:
 2. **Wedding Website** - Bilingual wedding site with RSVP system (React, FastAPI, PostgreSQL, Tailwind)
 3. **Money Review Page** - Budget dashboard with D3.js visualizations (FastAPI, React, D3.js, PostgreSQL)
 4. **REST API with Advanced Features** - Enterprise patterns with auth and caching (FastAPI, PostgreSQL, Redis)
-5. **Database Performance Analyzer** - Query optimization tool (Python, SQL, PostgreSQL)
+5. **Claude MCP Server Collection** - MCP servers for Claude AI with stocks/weather APIs (Python, MCP, APIs)
 6. **LeetCode Practice** - Daily algorithm practice with solutions (Python, Algorithms, Data Structures)
 
 ### SEO Optimization

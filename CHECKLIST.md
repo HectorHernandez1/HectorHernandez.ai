@@ -202,17 +202,17 @@ Use this checklist to ensure your portfolio is ready for deployment and job appl
    - [x] GitHub link: https://github.com/HectorHernandez1/LeetCodePractice
    - [x] Added to portfolio with screenshot
 
+5. - [x] **Claude MCP Server Collection**
+   - [x] MCP servers for Claude AI with stocks/weather APIs
+   - [x] GitHub link: https://github.com/HectorHernandez1/ClaudeMCP
+   - [x] Added to portfolio with screenshot
+
 **Placeholder Projects (to be built):**
 
-5. - [ ] **REST API with Advanced Features**
+6. - [ ] **REST API with Advanced Features**
    - [ ] Build with FastAPI, PostgreSQL, Redis
    - [ ] Deploy demo
    - [ ] Update portfolio with links
-
-6. - [ ] **Database Performance Analyzer**
-   - [ ] Build tool in Python
-   - [ ] Add to GitHub
-   - [ ] Update portfolio
 
 ## Phase 6: Launch & Promotion
 
