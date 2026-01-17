@@ -647,6 +647,25 @@ img {
     color: var(--accent-color);
 }
 
+.contact-item-link {
+    text-decoration: none;
+    display: block;
+}
+
+.contact-item-link:hover .contact-item {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.contact-item-link .contact-item span {
+    color: var(--text-dark);
+}
+
+.contact-item-link:hover .contact-item span {
+    color: var(--accent-color);
+}
+
 .contact-form {
     background-color: var(--white);
     padding: 2rem;
