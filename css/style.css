@@ -682,6 +682,15 @@ img {
     color: var(--accent-color);
 }
 
+.contact-item-link:focus {
+    outline: none;
+}
+
+.contact-item-link:focus .contact-item {
+    box-shadow: 0 0 0 3px rgba(100, 149, 237, 0.3);
+    transform: translateY(-5px);
+}
+
 .contact-form {
     background-color: var(--white);
     padding: 2rem;
