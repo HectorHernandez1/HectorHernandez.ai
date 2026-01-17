@@ -4,7 +4,9 @@ Use this checklist to ensure your portfolio is ready for deployment and job appl
 
 ---
 
-## ✅ Current Status (As of January 14, 2026)
+## ✅ Current Status (As of January 16, 2026)
+
+🌐 **Live at: [https://www.hectorhernandez.dev](https://www.hectorhernandez.dev)**
 
 **Completed:**
 - ✅ Portfolio website built and pushed to GitHub
@@ -17,13 +19,14 @@ Use this checklist to ensure your portfolio is ready for deployment and job appl
 - ✅ Added Wedding Website project (React, FastAPI, PostgreSQL)
 - ✅ Added Money Review Page project
 - ✅ Added LeetCode Practice project
+- ✅ Added Portfolio Website project (this site!)
 
 **Next Steps:**
-1. **Enable GitHub Pages** (5 minutes) - Make portfolio live
+1. ~~**Enable GitHub Pages**~~ ✅ Done - Portfolio live at hectorhernandez.dev
 2. ~~**Add resume PDF**~~ ✅ Added (docs/Hector_Hernandez_Resume.pdf)
-3. **Get custom domain** (optional, recommended)
+3. ~~**Get custom domain**~~ ✅ Done - hectorhernandez.dev
 
-**Current Focus:** 4 of 6 portfolio projects are now real projects with GitHub links
+**Current Focus:** 7 projects now showcased on the portfolio
 
 ---
 
@@ -91,8 +94,8 @@ Use this checklist to ensure your portfolio is ready for deployment and job appl
   - [ ] Folder: / (root)
   - [ ] Click "Save"
 
-- [ ] **Verify deployment** (wait 2-3 minutes)
-  - [ ] Visit `https://hectorhernandez1.github.io/HectorHernandez.ai/`
+- [x] **Verify deployment**
+  - [x] Visit [https://www.hectorhernandez.dev](https://www.hectorhernandez.dev)
   - [ ] Site loads correctly
   - [ ] All sections work
   - [ ] Images load (or placeholders appear)

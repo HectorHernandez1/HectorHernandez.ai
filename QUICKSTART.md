@@ -1,5 +1,7 @@
 # Quick Start Guide
 
+🌐 **Live at: [https://www.hectorhernandez.dev](https://www.hectorhernandez.dev)**
+
 Get your portfolio website up and running in minutes!
 
 ## Immediate Next Steps
@@ -63,7 +65,7 @@ git push -u origin main
 
 # Enable GitHub Pages in repository Settings → Pages
 # Select: main branch, / (root) folder
-# Your site will be live at: https://HectorHernandez1.github.io/
+# Your site is live at: https://www.hectorhernandez.dev
 ```
 
 See `DEPLOYMENT.md` for detailed instructions.

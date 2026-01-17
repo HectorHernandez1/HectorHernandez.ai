@@ -1,5 +1,7 @@
 # Hector Hernandez - Portfolio Website
 
+🌐 **Live at: [https://www.hectorhernandez.dev](https://www.hectorhernandez.dev)**
+
 Professional portfolio website for a backend software engineer specializing in data pipelines, ETL systems, and scalable backend architecture.
 
 ## Overview
@@ -101,7 +103,7 @@ portfolio-website/
    - Select "main" branch as source
    - Click "Save"
 
-3. Your site will be live at: `https://HectorHernandez1.github.io/HectorHernandez.ai/`
+3. Your site will be live at: [https://www.hectorhernandez.dev](https://www.hectorhernandez.dev)
 
 ## Customization
 
@@ -180,6 +182,7 @@ The portfolio showcases the following projects:
 4. **REST API with Advanced Features** - Enterprise patterns with auth and caching (FastAPI, PostgreSQL, Redis)
 5. **Claude MCP Server Collection** - MCP servers for Claude AI with stocks/weather APIs (Python, MCP, APIs)
 6. **LeetCode Practice** - Daily algorithm practice with solutions (Python, Algorithms, Data Structures)
+7. **Portfolio Website** - This very site! Personal portfolio (HTML, CSS, JavaScript, Bootstrap) - [hectorhernandez.dev](https://www.hectorhernandez.dev)
 
 ### SEO Optimization
 

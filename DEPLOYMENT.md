@@ -1,5 +1,7 @@
 # Deployment Guide
 
+🌐 **Live at: [https://www.hectorhernandez.dev](https://www.hectorhernandez.dev)**
+
 This guide will help you deploy your portfolio website to GitHub Pages.
 
 ## Prerequisites
@@ -71,7 +73,7 @@ git push -u origin main
 
 ### 6. Verify Deployment
 
-Visit your site at: `https://HectorHernandez1.github.io/`
+Visit your site at: [https://www.hectorhernandez.dev](https://www.hectorhernandez.dev)
 
 ## Alternative: Project Repository (Not User Site)
 

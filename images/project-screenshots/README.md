@@ -1,6 +1,8 @@
 # Project Screenshots
 
-This directory should contain screenshots for each of the 6 featured projects on your portfolio.
+🌐 Portfolio live at: [https://www.hectorhernandez.dev](https://www.hectorhernandez.dev)
+
+This directory contains screenshots for each of the featured projects on your portfolio.
 
 ## Required Images
 
