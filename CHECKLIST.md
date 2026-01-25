@@ -210,6 +210,11 @@ Use this checklist to ensure your portfolio is ready for deployment and job appl
    - [x] GitHub link: https://github.com/HectorHernandez1/ClaudeMCP
    - [x] Added to portfolio with screenshot
 
+6. - [x] **ConvergeAI**
+   - [x] AI consensus problem solver with GPT-5.2 and Claude Sonnet 4.5
+   - [x] GitHub link: https://github.com/HectorHernandez1/ConvergeAI
+   - [x] Added to portfolio with screenshot
+
 **Placeholder Projects (to be built):**
 
 6. - [ ] **REST API with Advanced Features**
