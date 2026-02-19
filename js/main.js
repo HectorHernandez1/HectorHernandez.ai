@@ -1,4 +1,45 @@
 // ===================================
+// Dark Mode Toggle
+// ===================================
+(function () {
+    const themeToggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+    const icon = themeToggle.querySelector('i');
+
+    // Check for saved preference, otherwise check system preference
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        html.setAttribute('data-theme', savedTheme);
+        updateIcon(savedTheme);
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        html.setAttribute('data-theme', 'dark');
+        updateIcon('dark');
+    }
+
+    themeToggle.addEventListener('click', function () {
+        const currentTheme = html.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+        html.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        updateIcon(newTheme);
+    });
+
+    function updateIcon(theme) {
+        icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    }
+
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+        if (!localStorage.getItem('theme')) {
+            const newTheme = e.matches ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            updateIcon(newTheme);
+        }
+    });
+})();
+
+// ===================================
 // Smooth Scrolling for Navigation Links
 // ===================================
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -26,7 +67,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // ===================================
 // Navbar Background on Scroll
 // ===================================
-window.addEventListener('scroll', function() {
+window.addEventListener('scroll', function () {
     const navbar = document.getElementById('mainNav');
     const backToTopBtn = document.getElementById('backToTop');
 
@@ -49,7 +90,7 @@ window.addEventListener('scroll', function() {
 // ===================================
 // Active Navigation Link Highlighting
 // ===================================
-window.addEventListener('scroll', function() {
+window.addEventListener('scroll', function () {
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
 
@@ -77,7 +118,7 @@ window.addEventListener('scroll', function() {
 // ===================================
 const backToTopBtn = document.getElementById('backToTop');
 
-backToTopBtn.addEventListener('click', function() {
+backToTopBtn.addEventListener('click', function () {
     window.scrollTo({
         top: 0,
         behavior: 'smooth'
@@ -92,7 +133,7 @@ const observerOptions = {
     rootMargin: '0px 0px -50px 0px'
 };
 
-const observer = new IntersectionObserver(function(entries) {
+const observer = new IntersectionObserver(function (entries) {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             entry.target.classList.add('animate-in');
@@ -102,7 +143,7 @@ const observer = new IntersectionObserver(function(entries) {
 }, observerOptions);
 
 // Observe elements for animation
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const animateElements = document.querySelectorAll('.timeline-item, .experience-card, .project-card, .skills-category');
     animateElements.forEach(el => {
         observer.observe(el);
@@ -132,75 +173,97 @@ style.textContent = `
 document.head.appendChild(style);
 
 // ===================================
-// Contact Form Handling
+// Contact Form Handling (Formspree AJAX)
 // ===================================
 const contactForm = document.getElementById('contactForm');
+const submitBtn = document.getElementById('submitBtn');
+const formStatus = document.getElementById('formStatus');
 
-contactForm.addEventListener('submit', function(e) {
+contactForm.addEventListener('submit', function (e) {
     e.preventDefault();
 
     // Get form data
-    const formData = {
-        name: document.getElementById('name').value,
-        email: document.getElementById('email').value,
-        subject: document.getElementById('subject').value,
-        message: document.getElementById('message').value
-    };
+    const formData = new FormData(contactForm);
 
     // Simple validation
-    if (!formData.name || !formData.email || !formData.subject || !formData.message) {
-        alert('Please fill in all fields');
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const subject = document.getElementById('subject').value;
+    const message = document.getElementById('message').value;
+
+    if (!name || !email || !subject || !message) {
+        showStatus('Please fill in all fields.', 'error');
         return;
     }
 
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-        alert('Please enter a valid email address');
+    if (!emailRegex.test(email)) {
+        showStatus('Please enter a valid email address.', 'error');
         return;
     }
 
-    // TODO: Replace with your actual form handling service
-    // Options: Formspree, EmailJS, Netlify Forms, or backend API
-
-    // For now, we'll simulate a successful submission
-    console.log('Form data:', formData);
-
-    // Create mailto link as fallback
-    const mailtoLink = `mailto:hhhector9@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(
-        `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
-    )}`;
-
-    // Show success message
-    const submitBtn = contactForm.querySelector('button[type="submit"]');
+    // Disable button and show loading state
     const originalBtnText = submitBtn.innerHTML;
-    submitBtn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
     submitBtn.disabled = true;
-    submitBtn.classList.add('btn-success');
-    submitBtn.classList.remove('btn-primary');
 
-    // Open mailto as fallback
-    window.location.href = mailtoLink;
-
-    // Reset form
-    setTimeout(() => {
-        contactForm.reset();
-        submitBtn.innerHTML = originalBtnText;
-        submitBtn.disabled = false;
-        submitBtn.classList.remove('btn-success');
-        submitBtn.classList.add('btn-primary');
-    }, 3000);
+    // Submit to Formspree via AJAX
+    fetch(contactForm.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'Accept': 'application/json'
+        }
+    })
+        .then(response => {
+            if (response.ok) {
+                showStatus('Message sent successfully! I\'ll get back to you soon.', 'success');
+                contactForm.reset();
+                submitBtn.innerHTML = '<i class="fas fa-check"></i> Sent!';
+                submitBtn.classList.add('btn-success');
+                submitBtn.classList.remove('btn-primary');
+            } else {
+                return response.json().then(data => {
+                    throw new Error(data.errors ? data.errors.map(e => e.message).join(', ') : 'Something went wrong.');
+                });
+            }
+        })
+        .catch(error => {
+            showStatus('Oops! ' + error.message + ' Please try emailing me directly.', 'error');
+            submitBtn.innerHTML = originalBtnText;
+        })
+        .finally(() => {
+            submitBtn.disabled = false;
+            // Reset button after 4 seconds
+            setTimeout(() => {
+                submitBtn.innerHTML = originalBtnText;
+                submitBtn.classList.remove('btn-success');
+                submitBtn.classList.add('btn-primary');
+            }, 4000);
+        });
 });
+
+function showStatus(message, type) {
+    formStatus.textContent = message;
+    formStatus.className = 'form-status ' + type;
+    formStatus.style.display = 'block';
+
+    // Auto-hide after 6 seconds
+    setTimeout(() => {
+        formStatus.style.display = 'none';
+    }, 6000);
+}
 
 // ===================================
 // Project Card Placeholder Images
 // ===================================
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const projectImages = document.querySelectorAll('.project-image img');
 
     projectImages.forEach((img, index) => {
         // If image fails to load, use a placeholder
-        img.addEventListener('error', function() {
+        img.addEventListener('error', function () {
             // Create a canvas with gradient background
             const canvas = document.createElement('canvas');
             canvas.width = 800;
@@ -259,7 +322,7 @@ function typeWriter(element, text, speed = 100) {
 // ===================================
 // Navbar Collapse on Click Outside
 // ===================================
-document.addEventListener('click', function(event) {
+document.addEventListener('click', function (event) {
     const navbar = document.querySelector('.navbar-collapse');
     const toggler = document.querySelector('.navbar-toggler');
 
@@ -275,7 +338,7 @@ document.addEventListener('click', function(event) {
 // ===================================
 let skillClickCount = 0;
 document.querySelectorAll('.skill-tag').forEach(tag => {
-    tag.addEventListener('click', function() {
+    tag.addEventListener('click', function () {
         skillClickCount++;
         if (skillClickCount >= 10) {
             console.log('🎉 You found the easter egg! Thanks for exploring!');
