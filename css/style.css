@@ -149,8 +149,133 @@
     color: #FFFFFF;
 }
 
+[data-theme="dark"] .hero-subtitle {
+    color: #8AB4F8;
+}
+
+[data-theme="dark"] .hero-stats .stat-item {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+[data-theme="dark"] .hero-stats .stat-item i {
+    color: #8AB4F8;
+}
+
 [data-theme="dark"] .profile-photo-wrapper {
     box-shadow: 0 8px 32px rgba(108, 155, 242, 0.3);
+}
+
+/* Dark mode: Navbar logo */
+[data-theme="dark"] .navbar-brand {
+    color: #FFFFFF !important;
+}
+
+/* Dark mode: About section text */
+[data-theme="dark"] .about-content p,
+[data-theme="dark"] .about-content .lead {
+    color: #D0D0E0;
+}
+
+[data-theme="dark"] .about-content .lead {
+    color: #E0E0F0;
+}
+
+/* Dark mode: Section subtitles */
+[data-theme="dark"] .section-subtitle {
+    color: #B0B0C8;
+}
+
+/* Dark mode: Experience metadata */
+[data-theme="dark"] .experience-company {
+    color: #B0B0C8;
+}
+
+[data-theme="dark"] .experience-date {
+    color: #B0B0C8;
+}
+
+[data-theme="dark"] .experience-achievements li {
+    color: #D0D0E0;
+}
+
+/* Dark mode: Timeline metadata */
+[data-theme="dark"] .timeline-meta {
+    color: #B0B0C8;
+}
+
+[data-theme="dark"] .timeline-meta strong {
+    color: #E0E0F0;
+}
+
+[data-theme="dark"] .timeline-details li {
+    color: #D0D0E0;
+}
+
+/* Dark mode: Project descriptions */
+[data-theme="dark"] .project-description {
+    color: #C8C8DC;
+}
+
+/* Dark mode: Skill tags enhanced borders */
+[data-theme="dark"] .skill-tag {
+    border: 1px solid rgba(108, 155, 242, 0.25);
+}
+
+/* Dark mode: Project tags enhanced borders */
+[data-theme="dark"] .project-tags .tag {
+    border: 1px solid rgba(108, 155, 242, 0.2);
+}
+
+/* Dark mode: Contact item text */
+[data-theme="dark"] .contact-item span {
+    color: #C8C8DC !important;
+}
+
+[data-theme="dark"] .contact-item i {
+    color: #8AB4F8;
+}
+
+/* Dark mode: Form fields enhanced */
+[data-theme="dark"] .contact-form .form-control {
+    border-color: rgba(108, 155, 242, 0.3);
+}
+
+[data-theme="dark"] .contact-form .form-control::placeholder {
+    color: #8888A8;
+}
+
+/* Dark mode: Footer social icons */
+[data-theme="dark"] .social-links a {
+    background-color: rgba(108, 155, 242, 0.15);
+    color: #C8C8DC;
+}
+
+[data-theme="dark"] .social-links a:hover {
+    background-color: var(--accent-color);
+    color: #FFFFFF;
+}
+
+[data-theme="dark"] .footer-text {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+[data-theme="dark"] .footer-credits {
+    color: rgba(255, 255, 255, 0.65);
+}
+
+/* Dark mode: Blog preview */
+[data-theme="dark"] .blog-preview-excerpt {
+    color: #C8C8DC;
+}
+
+[data-theme="dark"] .blog-preview-meta {
+    color: #A0A0B8;
+}
+
+/* Dark mode: Back to top button */
+[data-theme="dark"] .back-to-top {
+    background-color: var(--accent-color);
+    color: #FFFFFF;
 }
 
 /* ===================================

@@ -2,7 +2,7 @@
 
 🌐 **Live at: [https://www.hectorhernandez.dev](https://www.hectorhernandez.dev)**
 
-Professional portfolio website for a backend software engineer specializing in data pipelines, ETL systems, and scalable backend architecture.
+Professional portfolio website for a backend software engineer with 10 years at Intel, specializing in data pipelines, ETL systems, and scalable backend architecture.
 
 ## Overview
 
