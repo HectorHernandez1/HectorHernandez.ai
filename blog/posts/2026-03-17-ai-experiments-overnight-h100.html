@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="I let Claude Code run 16 autonomous experiments overnight on a rented H100 GPU using Karpathy's autoresearch — here's the full breakdown of what it found.">
+    <meta name="keywords"
+        content="AI Agents, LLM Training, RunPod, Claude Code, autoresearch, H100, GPU, Machine Learning, Hector Hernandez">
+    <meta name="author" content="Hector Hernandez">
+
+    <title>I Let an AI Run 16 Experiments Overnight on an H100 | Hector Hernandez</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&family=Fira+Code:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../css/blog.css">
+
+    <!-- Highlight.js for code syntax highlighting -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand" href="../../index.html">HH</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../index.html#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../index.html#skills">Skills</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../index.html#education">Education</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../index.html#experience">Experience</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../index.html#projects">Projects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="../">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../index.html#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Article Hero -->
+    <section class="article-hero">
+        <div class="container">
+            <div class="article-header">
+                <span class="article-category">AI Agents</span>
+                <h1 class="article-title">I Let an AI Run 16 Experiments Overnight on an H100 — Here's What It Found</h1>
+                <div class="article-meta">
+                    <span><i class="fas fa-user"></i> Hector Hernandez</span>
+                    <span><i class="fas fa-calendar-alt"></i> March 17, 2026</span>
+                    <span><i class="fas fa-clock"></i> 10 min read</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Article Content -->
+    <article class="article-content">
+        <a href="../" class="back-to-blog">
+            <i class="fas fa-arrow-left"></i> Back to Blog
+        </a>
+
+        <p>
+            I'm currently taking an agentic AI course, and one of the things that keeps coming up is the idea of AI
+            agents that don't just answer questions — they <em>do things</em>. Autonomously. In a loop. Without you
+            babysitting them.
+        </p>
+
+        <p>
+            So when I stumbled across Andrej Karpathy's
+            <a href="https://github.com/karpathy/autoresearch" target="_blank">autoresearch</a> project, I had to try
+            it. The pitch is simple and kind of wild: give an AI agent a real LLM training setup, tell it to experiment,
+            and go to sleep. Wake up to a better model.
+        </p>
+
+        <p>
+            I'm not a researcher at a big AI lab. I'm just a guy with a 2008 MacBook Pro running Ubuntu, an agentic AI
+            course under my belt, and a RunPod account. Here's exactly what happened.
+        </p>
+
+        <h2>What is autoresearch?</h2>
+
+        <p>
+            Karpathy's autoresearch is a minimal single-file project. There are really only three things that matter:
+        </p>
+
+        <ul>
+            <li><strong><code>prepare.py</code></strong> — downloads training data and trains a tokenizer. You run it
+                once and never touch it again.</li>
+            <li><strong><code>train.py</code></strong> — a full GPT model, optimizer, and training loop in one file.
+                This is what the AI agent edits.</li>
+            <li><strong><code>program.md</code></strong> — your instructions to the agent. This is what <em>you</em>
+                write and iterate on.</li>
+        </ul>
+
+        <p>
+            The loop works like this: the agent reads <code>program.md</code>, modifies <code>train.py</code>, runs a
+            5-minute training experiment, checks if the validation metric (<code>val_bpb</code> — lower is better)
+            improved, keeps the change if it did or reverts it if it didn't, and repeats. Forever. Or until you stop it.
+        </p>
+
+        <p>
+            On a fast GPU you get roughly <strong>12 experiments per hour</strong> — about 100 overnight.
+        </p>
+
+        <h2>Renting an H100 on RunPod</h2>
+
+        <p>
+            My MacBook definitely wasn't running this. The project requires an NVIDIA GPU, and Karpathy tested on an
+            H100.
+        </p>
+
+        <p>
+            RunPod makes renting cloud GPUs surprisingly painless. You create an account, add credits, and spin up a
+            "pod" — a containerized VM with your chosen GPU attached. Billing is per-second, so you're not locked into
+            hourly minimums.
+        </p>
+
+        <p>
+            I picked the <strong>H100 SXM 80GB</strong> on Community Cloud at <strong>$2.69/hr</strong>. For an
+            overnight run that's about $22. Way cheaper than anything AWS or Google Cloud would charge for the same
+            hardware.
+        </p>
+
+        <p>A few things I learned setting it up:</p>
+
+        <ul>
+            <li>Use the <strong>RunPod PyTorch template</strong> — it comes pre-loaded with CUDA, Python, and
+                everything you need so you're not installing GPU drivers from scratch.</li>
+            <li>Set your container disk to at least <strong>20GB</strong> — the training data download needs the space.
+            </li>
+            <li>Create a <strong>Network Volume</strong> and clone your repo into <code>/workspace</code> — this
+                storage survives even if you terminate the pod, so your results are safe.</li>
+            <li>There's no "Stop" button on some pod configurations — only Terminate. Since my repo was on the Network
+                Volume, terminating was fine. Everything important persisted.</li>
+            <li>Enable <strong>SSH access</strong> so you can connect from your terminal. RunPod gives you an exact SSH
+                command to copy-paste.</li>
+        </ul>
+
+        <h2>The Baseline</h2>
+
+        <p>
+            Once everything was set up I ran <code>train.py</code> manually once to get a baseline before handing things
+            over to the agent.
+        </p>
+
+        <pre><code class="language-plaintext">val_bpb:          0.997264
+training_seconds: 300.1
+mfu_percent:      38.50
+num_params_M:     50.3</code></pre>
+
+        <p>
+            So: a 50M parameter model, 38.5% GPU utilization (lots of room to improve), and a val_bpb of
+            <strong>0.997264</strong>. That's the number to beat.
+        </p>
+
+        <p>
+            I added this to <code>program.md</code> so the agent would know its starting point.
+        </p>
+
+        <h2>Unleashing Claude Code</h2>
+
+        <p>
+            The agent I used was <strong>Claude Code</strong> — Anthropic's agentic coding tool. I installed it on the
+            pod, set my API key, and kicked it off inside a <code>tmux</code> session so it would keep running after I
+            closed my SSH connection.
+        </p>
+
+        <p>The prompt I gave it:</p>
+
+        <blockquote>
+            <p>
+                Please read program.md carefully. Our baseline val_bpb is 0.997264 with 38.5% MFU on an H100 SXM 80GB.
+                Your job is to autonomously run experiments by modifying train.py, running <code>uv run train.py</code>,
+                checking if val_bpb improved, keeping the change if it did and reverting if it didn't, then repeating.
+                Run as many experiments as possible overnight. Focus on improving val_bpb — lower is better. Do not
+                modify prepare.py.
+            </p>
+        </blockquote>
+
+        <p>
+            Then I detached from tmux (<code>Ctrl+B</code>, <code>D</code>), closed my laptop, and went to sleep.
+        </p>
+
+        <h2>What Happened Overnight</h2>
+
+        <p>
+            In the morning I SSH'd back in, reattached to the tmux session, and found <strong>16 winning
+                experiments</strong> committed to a new branch. Here's the full progression:
+        </p>
+
+        <div class="table-responsive">
+            <table class="table table-dark table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Change</th>
+                        <th>Before</th>
+                        <th>After</th>
+                        <th>Δ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>depth=9: more params with acceptable step count</td>
+                        <td>0.998781</td>
+                        <td>0.997468</td>
+                        <td>-0.001313</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>matrix_lr=0.05: higher Muon LR converges faster</td>
+                        <td>0.997468</td>
+                        <td>0.996470</td>
+                        <td>-0.000998</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>warmdown_ratio=0.6: longer cooldown helps</td>
+                        <td>0.996470</td>
+                        <td>0.995290</td>
+                        <td>-0.001180</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>embedding_lr=0.8: higher embedding LR helps</td>
+                        <td>0.995290</td>
+                        <td>0.995149</td>
+                        <td>-0.000141</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>unembedding_lr=0.006: higher lm_head LR helps</td>
+                        <td>0.995149</td>
+                        <td>0.994054</td>
+                        <td>-0.001095</td>
+                    </tr>
+                    <tr class="table-success">
+                        <td><strong>6</strong></td>
+                        <td><strong>batch_size=2<sup>18</sup>: 2x more optimizer steps is huge win</strong></td>
+                        <td><strong>0.994054</strong></td>
+                        <td><strong>0.981629</strong></td>
+                        <td><strong>-0.012425</strong></td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>x0_lambdas init=0.15: stronger residual helps</td>
+                        <td>0.981629</td>
+                        <td>0.981323</td>
+                        <td>-0.000306</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>x0_lambdas init=0.2: even stronger residual helps</td>
+                        <td>0.981323</td>
+                        <td>0.980177</td>
+                        <td>-0.001146</td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td>matrix_lr=0.04: lower LR better with smaller batch</td>
+                        <td>0.980177</td>
+                        <td>0.979518</td>
+                        <td>-0.000659</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>warmdown_ratio=0.65: slightly longer cooldown</td>
+                        <td>0.979518</td>
+                        <td>0.979514</td>
+                        <td>-0.000004</td>
+                    </tr>
+                    <tr>
+                        <td>11</td>
+                        <td>muon momentum warmup 200 steps</td>
+                        <td>0.979514</td>
+                        <td>0.979094</td>
+                        <td>-0.000420</td>
+                    </tr>
+                    <tr>
+                        <td>12</td>
+                        <td>matrix_lr=0.045</td>
+                        <td>0.979094</td>
+                        <td>0.979026</td>
+                        <td>-0.000068</td>
+                    </tr>
+                    <tr>
+                        <td>13</td>
+                        <td>weight_decay=0.15</td>
+                        <td>0.979026</td>
+                        <td>0.978706</td>
+                        <td>-0.000320</td>
+                    </tr>
+                    <tr>
+                        <td>14</td>
+                        <td>window_pattern=S: all short attention gives more steps</td>
+                        <td>0.978706</td>
+                        <td>0.978668</td>
+                        <td>-0.000038</td>
+                    </tr>
+                    <tr>
+                        <td>15</td>
+                        <td>short window=seq_len//4: faster attention, more steps</td>
+                        <td>0.978668</td>
+                        <td>0.978627</td>
+                        <td>-0.000041</td>
+                    </tr>
+                    <tr>
+                        <td>16</td>
+                        <td>muon ns_steps=4: faster optimizer step</td>
+                        <td>0.978627</td>
+                        <td>0.977733</td>
+                        <td>-0.000894</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p>
+            <strong>Final val_bpb: 0.977733</strong> — an improvement of <strong>0.019531</strong> from the baseline.
+        </p>
+
+        <p>
+            The single biggest jump was experiment #6: doubling the batch size. That one change alone dropped val_bpb by
+            0.012 — more than half of the total overnight improvement. The agent correctly identified this as the
+            highest-leverage change and then spent the rest of the night fine-tuning around it.
+        </p>
+
+        <h2>What I Learned</h2>
+
+        <p>
+            <strong>The agent is surprisingly good at this.</strong> Claude Code didn't just randomly tweak numbers. It
+            explored depth, learning rates, batch sizes, optimizer settings, and attention patterns in a logical
+            sequence. Each commit message is a coherent hypothesis with a result.
+        </p>
+
+        <p>
+            <strong>GPU utilization matters.</strong> Starting at 38.5% MFU left a lot of room. The agent found that
+            changes like short attention windows and larger batch sizes pushed more work through the H100 per minute,
+            directly translating to better models.
+        </p>
+
+        <p>
+            <strong>The cost was reasonable.</strong> The total run cost me around $22 for the overnight session. For 16
+            real experiments on an H100, that's hard to beat.
+        </p>
+
+        <p>
+            <strong>program.md is the real skill.</strong> The agent is only as good as the instructions you give it.
+            Writing a clear, well-structured <code>program.md</code> — with the baseline, the goal, and the
+            constraints — is what separates a useful overnight run from a chaotic one.
+        </p>
+
+        <h2>What's Next</h2>
+
+        <p>
+            I want to run this same experiment locally on my <strong>ASRock Creator Radeon AI Pro R9700</strong> — a
+            32GB VRAM AMD card. That means getting the training loop running on <strong>ROCm</strong> instead of CUDA.
+            AMD's ROCm support has improved a lot recently and the R9700 is a serious piece of hardware, so I'm curious
+            whether the agent finds similar optimizations on a different architecture.
+        </p>
+
+        <p>
+            If the local ROCm run works, I could run continuous overnight experiments for free instead of paying for
+            cloud GPU time. More on that in the next post.
+        </p>
+
+        <p>
+            <em>The full experiment branch is on GitHub:
+                <a href="https://github.com/HectorHernandez1/autoresearchTest/tree/autoresearch/arch-exploration"
+                    target="_blank">autoresearchTest/autoresearch/arch-exploration</a></em>
+        </p>
+
+        <p>
+            <em>Questions or ideas? Reach out — I'm always happy to talk about this stuff.</em>
+        </p>
+
+        <!-- Tags -->
+        <div class="article-tags">
+            <a href="#" class="article-tag">AI Agents</a>
+            <a href="#" class="article-tag">LLM Training</a>
+            <a href="#" class="article-tag">RunPod</a>
+            <a href="#" class="article-tag">Claude Code</a>
+            <a href="#" class="article-tag">autoresearch</a>
+        </div>
+
+        <!-- Share Section -->
+        <div class="share-section">
+            <h4>Share this post</h4>
+            <div class="share-buttons">
+                <a href="https://twitter.com/intent/tweet?url=https://www.hectorhernandez.dev/blog/posts/2026-03-17-ai-experiments-overnight-h100.html&text=I Let an AI Run 16 Experiments Overnight on an H100"
+                    target="_blank" class="share-btn" aria-label="Share on Twitter">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://www.hectorhernandez.dev/blog/posts/2026-03-17-ai-experiments-overnight-h100.html"
+                    target="_blank" class="share-btn" aria-label="Share on LinkedIn">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="mailto:?subject=Check out this blog post&body=I Let an AI Run 16 Experiments Overnight on an H100: https://www.hectorhernandez.dev/blog/posts/2026-03-17-ai-experiments-overnight-h100.html"
+                    class="share-btn" aria-label="Share via Email">
+                    <i class="fas fa-envelope"></i>
+                </a>
+            </div>
+        </div>
+    </article>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="social-links mb-3">
+                        <a href="https://github.com/HectorHernandez1" target="_blank" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/hector-hernandez-55600191/" target="_blank"
+                            aria-label="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="mailto:hhhector9@gmail.com" aria-label="Email">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                    <p class="footer-text">
+                        &copy; 2026 Hector Hernandez. All rights reserved.
+                    </p>
+                    <p class="footer-credits">
+                        Built with <i class="fas fa-heart"></i> using HTML, CSS, and JavaScript
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="back-to-top" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Highlight.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <!-- Back to Top Script -->
+    <script>
+        // Back to Top Button
+        const backToTopBtn = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', function () {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('show');
+            } else {
+                backToTopBtn.classList.remove('show');
+            }
+        });
+
+        backToTopBtn.addEventListener('click', function () {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+
+</html>
