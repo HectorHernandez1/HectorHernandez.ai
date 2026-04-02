@@ -129,7 +129,7 @@
     justify-content: space-between;
     align-items: center;
     padding-top: 1rem;
-    border-top: 1px solid #eee;
+    border-top: 1px solid var(--border-color);
 }
 
 .blog-card-tags {
@@ -291,8 +291,8 @@
     flex-wrap: wrap;
     margin: 2rem 0;
     padding: 1.5rem 0;
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .article-tag {
@@ -450,7 +450,7 @@
 }
 
 .page-btn.disabled {
-    background: #ccc;
+    background: var(--border-color);
     cursor: not-allowed;
     opacity: 0.6;
 }
