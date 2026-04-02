@@ -140,8 +140,8 @@
 
 .blog-tag {
     padding: 0.2rem 0.6rem;
-    background: var(--bg-light);
-    color: var(--text-light);
+    background: rgba(100, 149, 237, 0.15);
+    color: var(--accent-color);
     border-radius: 12px;
     font-size: 0.75rem;
     font-weight: 500;
