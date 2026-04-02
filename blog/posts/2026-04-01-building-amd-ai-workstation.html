@@ -289,9 +289,40 @@
         <h2>What's Next</h2>
 
         <p>
-            The plan is to eventually add an RTX 5090 and dual-boot into Windows for workloads that benefit from the
-            CUDA ecosystem. But honestly, ROCm has come a long way, and for now the all-AMD setup is doing everything I
-            need.
+            This machine is already earning its keep. Here's what I'm running on it right now:
+        </p>
+
+        <p>
+            <strong>Autoresearch on AMD</strong> &mdash; I'm replicating my
+            <a href="2026-03-17-ai-experiments-overnight-h100.html">overnight H100 experiment series</a> on the R9700
+            using ROCm. Same autonomous agent loop, different hardware. Early results are showing interesting
+            differences in how the agent explores the search space on RDNA 4 versus CUDA &mdash; more on that soon.
+        </p>
+
+        <p>
+            <strong>Voza</strong> &mdash; a push-to-talk voice-to-text app running entirely local. It chains
+            whisper.cpp (compiled with ROCm) into Ollama for transcription and downstream processing. Full Wayland
+            support, zero cloud dependency. The R9700 handles real-time transcription without breaking a sweat.
+        </p>
+
+        <p>
+            <strong>TurboQuant on gfx1201</strong> &mdash; I'm testing KV cache quantization on RDNA 4 and
+            benchmarking inference performance. As far as I can tell, these may be among the first Linux gfx1201
+            results out there. Planning to share the numbers with the community once I have a full dataset.
+        </p>
+
+        <p>
+            <strong>Tax Agent</strong> &mdash; a fully local tax preparation agent built on top of multiple Ollama
+            models (DeepSeek, Qwen3, and others) all running on-device. The 32GB of VRAM lets me keep several models
+            loaded simultaneously, which makes the multi-agent orchestration practical without any cloud calls.
+        </p>
+
+        <p>
+            <strong>Academic Benchmarks</strong> &mdash; as part of my Master's in Computer Science at ASU, I'm using
+            this machine to run academic benchmarks on local models. Being able to evaluate and compare model
+            performance on-device &mdash; without waiting for cloud GPU availability or racking up API costs &mdash;
+            has been a huge advantage for coursework and research. Having 32GB of VRAM locally means I can iterate on
+            experiments between classes instead of queuing jobs on shared infrastructure.
         </p>
 
         <p>
@@ -301,8 +332,8 @@
         </p>
 
         <p>
-            <em>Next up in this series: a deep dive into ROCm setup, PyTorch configuration, and running autonomous ML
-                experiments overnight on this hardware.</em>
+            <em>Next up in this series: deep dives into each of these projects &mdash; starting with the autoresearch
+                ROCm vs CUDA comparison and the Voza build log.</em>
         </p>
 
         <p>
