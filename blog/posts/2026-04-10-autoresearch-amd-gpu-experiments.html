@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="I pointed autoresearch at an AMD Radeon AI PRO R9700 and let it run 316 ML experiments overnight. The biggest win wasn't architecture — it was enabling torch.compile on RDNA4.">
+    <meta name="keywords"
+        content="AMD, Radeon R9700, RDNA 4, ROCm, torch.compile, autoresearch, ML experiments, AI agent, Claude Code, PyTorch, Hector Hernandez">
+    <meta name="author" content="Hector Hernandez">
+
+    <title>I Let an AI Agent Run 300+ ML Experiments on My AMD GPU Overnight | Hector Hernandez</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&family=Fira+Code:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../css/blog.css">
+
+    <!-- Highlight.js for code syntax highlighting -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand" href="../../index.html">HH</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../index.html#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../index.html#skills">Skills</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../index.html#education">Education</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../index.html#experience">Experience</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../index.html#projects">Projects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="../">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../index.html#contact">Contact</a>
+                    </li>
+                    <li class="nav-item ms-lg-2">
+                        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"
+                            title="Toggle dark mode">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Article Hero -->
+    <section class="article-hero">
+        <div class="container">
+            <div class="article-header">
+                <span class="article-category">AI Agents</span>
+                <h1 class="article-title">I Let an AI Agent Run 300+ ML Experiments on My AMD GPU Overnight. Here's What It Found.</h1>
+                <div class="article-meta">
+                    <span><i class="fas fa-user"></i> Hector Hernandez</span>
+                    <span><i class="fas fa-calendar-alt"></i> April 10, 2026</span>
+                    <span><i class="fas fa-clock"></i> 15 min read</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Article Content -->
+    <article class="article-content">
+        <a href="../" class="back-to-blog">
+            <i class="fas fa-arrow-left"></i> Back to Blog
+        </a>
+
+        <p class="lead">
+            I pointed autoresearch at an AMD Radeon AI PRO R9700 &mdash; RDNA4, gfx1201, 32 GB of VRAM &mdash; and let
+            it run ~316 experiments over several sessions. The headline finding wasn't an architecture trick or a clever
+            optimizer. It was that <code>torch.compile</code> works on this GPU now, and the popular AMD fork I started
+            from had it disabled.
+        </p>
+
+        <p>
+            There's a project called <a href="https://github.com/andyluo7/autoresearch" target="_blank">autoresearch</a>
+            &mdash; a simplified, single-GPU descendant of Karpathy's nanochat &mdash; that does something beautifully
+            stupid: it loops overnight, modifying a <code>train.py</code>, running short pretraining experiments, keeping
+            only the changes that improve validation loss, and iterating. It's autonomous ML research with the patience
+            of a machine and the compute budget of a hobbyist.
+        </p>
+
+        <h2>The Setup</h2>
+
+        <p>
+            The stack: <strong>ROCm 7.2.0</strong>, <strong>PyTorch 2.9.1+rocm6.3</strong>,
+            <strong>Ubuntu 24.04</strong>, a <strong>Ryzen 9 9950X3D</strong> on the CPU side. The model is a
+            25&ndash;50M parameter GPT with SwiGLU MLPs, rotary position embeddings, value embeddings
+            (ResFormer-style), and a MuonAdamW optimizer. Training data is ClimbMix (general web text).
+        </p>
+
+        <p>
+            I started from <a href="https://github.com/andyluo7/autoresearch" target="_blank">andyluo7's AMD fork</a>
+            of autoresearch, which disables <code>torch.compile</code> on ROCm and falls back to PyTorch SDPA instead
+            of Flash Attention 3. At the time the fork was written, that was the right call &mdash; compile didn't
+            work. I didn't question it.
+        </p>
+
+        <p>
+            Each experiment gets a fixed wall-clock budget (5, 10, or 15 minutes). The validation metric is
+            <code>val_bpb</code> (bits per byte), which is vocab-size-independent, so architecture changes get a fair
+            comparison. The agent &mdash; Claude Code &mdash; proposes a change, runs the experiment, checks whether
+            <code>val_bpb</code> improved, and either keeps or reverts.
+        </p>
+
+        <h2>Five Minutes: Squeezing Blood from a Stone</h2>
+
+        <p>
+            <strong>Session 1</strong> was pure architecture and hyperparameter exploration: 231 experiments, 35 kept.
+            Baseline <code>val_bpb</code>: 1.711. Final: 1.170 &mdash; a <strong>31% improvement</strong>.
+        </p>
+
+        <p>
+            The biggest wins were surprisingly mundane. Cutting <code>TOTAL_BATCH_SIZE</code> from 2<sup>19</sup> to
+            2<sup>15</sup> gave more optimizer steps in the fixed time window. Reducing depth from 8 to 5 layers.
+            Shrinking the FFN multiplier from 4 to 3. Fine-grained tuning of learning rates, initialization scales, and
+            betas. Nothing exotic &mdash; just the agent methodically searching the space one axis at a time.
+        </p>
+
+        <p>
+            <strong>Session 2</strong> was where things got interesting in a "negative results are results" way.
+            Twenty-five experiments testing training dynamics tricks: EMA, SWA, z-loss, multi-token prediction,
+            LayerDrop, label smoothing, dropout, gradient noise injection, Lookahead optimizer, and more.
+        </p>
+
+        <p>
+            <strong>Zero kept.</strong> Every single one was net negative.
+        </p>
+
+        <p>
+            The key insight: in a tight 5-minute budget with depth 5 and MuonAdamW, training never plateaus. The final
+            checkpoint is strictly the best one, so weight averaging can't help. Gradient noise injection was
+            catastrophic because Muon already normalizes gradients &mdash; adding noise on top just destroys signal.
+            The standard pretraining priors (EMA helps, z-loss helps) simply don't carry over to this regime.
+        </p>
+
+        <p>
+            Cross-seed variance was measured at ~0.005 <code>val_bpb</code>, so these weren't noise &mdash; the
+            effects were real and reliably negative.
+        </p>
+
+        <p>
+            <strong>Session 3</strong> tried structural shifts: optimizer swaps (full AdamW, Lion), parallel transformer
+            blocks, NormFormer, tied embeddings, MoE, differential attention. Fifteen experiments, one marginal keep.
+        </p>
+
+        <p>
+            Two findings stood out. First, <strong>Muon is essential</strong> &mdash; both AdamW and Lion were
+            significantly worse. Second, <strong>"throughput is king."</strong> Any change that cost even 10% per-step
+            speed got punished harder than any capacity gain could compensate. At low MFU, wall-clock efficiency
+            dominates everything.
+        </p>
+
+        <h2>The Budget Realization</h2>
+
+        <p>
+            After 271 experiments at 5 minutes, the config was ruthlessly optimized for that specific budget. So I
+            tried something obvious: what happens if I just give it more time?
+        </p>
+
+        <div class="table-responsive">
+            <table class="table table-dark table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Budget</th>
+                        <th>val_bpb</th>
+                        <th>Code changes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>5 min</strong></td>
+                        <td>1.170</td>
+                        <td>Fully tuned</td>
+                    </tr>
+                    <tr>
+                        <td><strong>10 min</strong></td>
+                        <td>1.123</td>
+                        <td>None</td>
+                    </tr>
+                    <tr>
+                        <td><strong>15 min</strong></td>
+                        <td>1.101</td>
+                        <td>None</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p>
+            No code changes. Just longer training. And the optimal architecture shifted &mdash; at 15 minutes, depth 7
+            beat depth 5, the matrix learning rate wanted 0.015 instead of 0.02, and the warmdown ratio moved from 0.85
+            to 0.93. After ~20 re-exploration experiments at 15 minutes: <code>val_bpb</code> <strong>1.090</strong>.
+        </p>
+
+        <p>
+            This is worth internalizing: <strong>hyperparameter optima are functions of your compute budget.</strong>
+            An agent that runs until it plateaus under one budget will not find the optimum under a different budget
+            unless you explicitly tell it to re-explore. The 5-minute champion is not the 15-minute champion.
+        </p>
+
+        <h2>The torch.compile Story</h2>
+
+        <p>
+            <strong>This is the actual headline of the post.</strong>
+        </p>
+
+        <p>
+            The AMD fork I started from disables <code>torch.compile</code> because it didn't work on ROCm when the
+            fork was written. I had Claude Code test whether that was still true with ROCm 7.2 + PyTorch 2.9.1.
+        </p>
+
+        <p>
+            It was not.
+        </p>
+
+        <p>
+            <strong>Re-enabling torch.compile</strong> (the change is literally uncommenting a line):
+        </p>
+
+        <ul>
+            <li><code>val_bpb</code>: 1.090 &rarr; 1.077</li>
+            <li>MFU: 10.5% &rarr; 13.3%</li>
+            <li>VRAM: 10.4 GB &rarr; 6.1 GB</li>
+            <li>Training steps in 15 min: 2,474 &rarr; 3,126 (+26%)</li>
+        </ul>
+
+        <p>
+            Then <strong>switching to <code>mode="max-autotune"</code></strong>:
+        </p>
+
+        <pre><code class="language-python">model = torch.compile(model, mode="max-autotune")</code></pre>
+
+        <ul>
+            <li><code>val_bpb</code>: 1.077 &rarr; 1.053</li>
+            <li>MFU: 13.3% &rarr; 19.0%</li>
+            <li>Training steps: 3,120 &rarr; 4,458 (+43%)</li>
+            <li>Step time: 289ms &rarr; 203ms</li>
+        </ul>
+
+        <p>
+            What happened? The default Triton kernel configurations for the small <code>dim=512</code> matmul shapes
+            in this model are not well-tuned for RDNA4. <code>max-autotune</code> spends extra compile time searching
+            over kernel configs and found materially better ones. The model was memory-bandwidth-bound on kernel
+            inefficiency, not launch overhead.
+        </p>
+
+        <p>
+            After <code>max-autotune</code>, batch size dynamics also reversed. At 5 minutes with low MFU, larger
+            batches hurt (fewer steps). At 15 minutes with efficient kernels, larger batches helped &mdash; the matmuls
+            hit better kernel shapes AND gradient quality improved. A sweep found the optimum at 48k tokens &mdash; a
+            non-power-of-2 that beat both 32k and 64k.
+        </p>
+
+        <p>
+            Stacking additional inductor flags (<code>aggressive_fusion</code>,
+            <code>loop_ordering_after_fusion</code>, <code>coordinate_descent_tuning</code>, fusing MLP gate+up
+            projections via cat-in-forward, fusing QKV) each shaved another 0.0001&ndash;0.002.
+        </p>
+
+        <p>
+            <strong>Final result: <code>val_bpb</code> 1.0446 at ~20% MFU.</strong>
+        </p>
+
+        <p>
+            From 1.711 to 1.0446 &mdash; a <strong>39% improvement</strong>. And the single biggest contributor
+            wasn't 231 architecture experiments. It was enabling a compiler flag that the ecosystem had caught up to.
+        </p>
+
+        <h2>What Did It Actually Learn?</h2>
+
+        <p>
+            Let's be honest about what 50M parameters trained for 15 minutes can do.
+        </p>
+
+        <p>
+            <strong>Untrained (random weights):</strong> Pure token salad &mdash; random word fragments with no
+            discernible pattern.
+        </p>
+
+        <p>
+            <strong>5-min trained (val_bpb 1.170):</strong> Topical words appear but degenerate into repetition loops:
+        </p>
+
+        <blockquote>
+            "The meaning of life is meaning meaning meaning meaning meaning..."
+        </blockquote>
+
+        <p>
+            <strong>15-min, pre-compile (val_bpb 1.090):</strong> Topical vocabulary with variety but no syntax:
+        </p>
+
+        <blockquote>
+            "life, living, lived, loved, peace, happiness, survival, creatures, organisms, generations, ecosystems,
+            suffering"
+        </blockquote>
+
+        <p>
+            <strong>Final (val_bpb 1.046):</strong> Trace amounts of English structure. For the prompt "In a distant
+            galaxy far away":
+        </p>
+
+        <blockquote>
+            "...far far north away away away the stretch away closer <strong>to make</strong> distance..."
+        </blockquote>
+
+        <p>
+            Note the function words ("to") and the verb phrase "to make." Still overwhelmingly word salad, but the
+            syntax is starting to show through. The model clearly learned topical vocabulary clustering. Sentence-level
+            structure needs more compute than 50M params &times; 15 minutes can provide.
+        </p>
+
+        <p>
+            This isn't a limitation of the GPU or the method &mdash; it's just physics. Language models need scale to
+            learn grammar.
+        </p>
+
+        <h2>What I'd Try Next</h2>
+
+        <ul>
+            <li><strong>Longer budgets.</strong> The 5&rarr;15 min transition showed that optimal configs shift with
+                budget. A 1-hour or overnight budget would likely find different depth/width/LR optima and might cross
+                the threshold into rudimentary syntax.</li>
+            <li><strong>Bigger model.</strong> With <code>torch.compile</code> dropping VRAM from 10.4 to 6.1 GB,
+                there's ~26 GB of headroom on this 32 GB card. A 200M+ parameter model might use it well.</li>
+            <li><strong>Narrower data.</strong> TinyStories or similar constrained-vocabulary datasets would let the
+                model learn actual sentence structure at this parameter count &mdash; useful for validating whether the
+                training dynamics are sound even if the capacity isn't there for general language.</li>
+            <li><strong>Flash Attention on ROCm.</strong> The current setup uses PyTorch SDPA. If composable kernel or
+                CK-based Flash Attention works on RDNA4, that's another MFU step.</li>
+        </ul>
+
+        <h2>Takeaways for AMD GPU Users</h2>
+
+        <ol>
+            <li><strong>Try <code>torch.compile</code> again.</strong> If you're on ROCm 7.x with a recent PyTorch, it
+                probably works now. Don't trust old forks that disable it &mdash; test it yourself. It was the single
+                biggest win in this entire experiment.</li>
+            <li><strong>Use <code>mode="max-autotune"</code>.</strong> The compile time is longer but the kernel search
+                finds substantially better configurations, especially for smaller matmul shapes common in sub-100M
+                models. The default kernels are not optimized for every GPU.</li>
+            <li><strong>Your hyperparameters are budget-specific.</strong> If you tuned at one training duration and then
+                scale up, re-tune. The optima move.</li>
+            <li><strong>Muon matters.</strong> If you're using MuonAdamW, don't swap it for AdamW or Lion at this scale.
+                It's not close.</li>
+            <li><strong>Profile before you architecture-search.</strong> I spent 271 experiments squeezing 31% out of
+                architecture. One compiler flag matched that. Check your MFU first.</li>
+        </ol>
+
+        <hr>
+
+        <p>
+            <em>This work builds on Andrej Karpathy's
+                <a href="https://github.com/karpathy/nanochat" target="_blank">nanochat</a> and
+                <a href="https://github.com/andyluo7/autoresearch" target="_blank">andyluo7's AMD fork</a>. The
+                autonomous agent was Claude Code. Hardware was a single AMD Radeon AI PRO R9700 (32 GB). Total
+                experiment time was roughly 48 hours of GPU time across all sessions.</em>
+        </p>
+
+        <!-- Tags -->
+        <div class="article-tags">
+            <a href="#" class="article-tag">AMD</a>
+            <a href="#" class="article-tag">RDNA 4</a>
+            <a href="#" class="article-tag">ROCm</a>
+            <a href="#" class="article-tag">torch.compile</a>
+            <a href="#" class="article-tag">ML Experiments</a>
+            <a href="#" class="article-tag">AI Agents</a>
+            <a href="#" class="article-tag">PyTorch</a>
+        </div>
+
+        <!-- Share Section -->
+        <div class="share-section">
+            <h4>Share this post</h4>
+            <div class="share-buttons">
+                <a href="https://twitter.com/intent/tweet?url=https://www.hectorhernandez.dev/blog/posts/2026-04-10-autoresearch-amd-gpu-experiments.html&text=I Let an AI Agent Run 300+ ML Experiments on My AMD GPU Overnight"
+                    target="_blank" class="share-btn" aria-label="Share on Twitter">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://www.hectorhernandez.dev/blog/posts/2026-04-10-autoresearch-amd-gpu-experiments.html"
+                    target="_blank" class="share-btn" aria-label="Share on LinkedIn">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="mailto:?subject=Check out this blog post&body=I Let an AI Agent Run 300+ ML Experiments on My AMD GPU Overnight: https://www.hectorhernandez.dev/blog/posts/2026-04-10-autoresearch-amd-gpu-experiments.html"
+                    class="share-btn" aria-label="Share via Email">
+                    <i class="fas fa-envelope"></i>
+                </a>
+            </div>
+        </div>
+    </article>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="social-links mb-3">
+                        <a href="https://github.com/HectorHernandez1" target="_blank" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/hector-hernandez-55600191/" target="_blank"
+                            aria-label="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="mailto:hhhector9@gmail.com" aria-label="Email">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                    <p class="footer-text">
+                        &copy; 2026 Hector Hernandez. All rights reserved.
+                    </p>
+                    <p class="footer-credits">
+                        Built with <i class="fas fa-heart"></i> using HTML, CSS, and JavaScript
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="back-to-top" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Theme Toggle -->
+    <script src="../../js/theme.js"></script>
+
+    <!-- Highlight.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <!-- Back to Top Script -->
+    <script>
+        const backToTopBtn = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', function () {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('show');
+            } else {
+                backToTopBtn.classList.remove('show');
+            }
+        });
+
+        backToTopBtn.addEventListener('click', function () {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+
+</html>
