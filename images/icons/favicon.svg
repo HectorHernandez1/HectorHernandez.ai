@@ -1,10 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#2C3E50"/>
-      <stop offset="100%" style="stop-color:#6495ED"/>
-    </linearGradient>
-  </defs>
-  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
-  <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="700" font-size="30" fill="#FFFFFF">HH</text>
+  <rect width="64" height="64" rx="14" fill="#0a0c10"/>
+  <rect x="1" y="1" width="62" height="62" rx="13" fill="none" stroke="#ffb224" stroke-opacity="0.35" stroke-width="2"/>
+  <text x="31" y="44" text-anchor="middle"
+    font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-weight="700"
+    font-size="28"><tspan fill="#e9ecf2">HH</tspan><tspan fill="#ffb224">/</tspan></text>
 </svg>
