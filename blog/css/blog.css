@@ -640,6 +640,11 @@ body {
     padding-left: 1.5rem;
 }
 
+.back-to-blog i {
+    /* the ::before chevron is the arrow; hide the redundant icon */
+    display: none;
+}
+
 .back-to-blog::before {
     content: '';
     position: absolute;
