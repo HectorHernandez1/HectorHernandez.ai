@@ -17,6 +17,14 @@ const MAX_OUTPUT_TOKENS = 400;   // reply length cap
 const PER_IP_PER_MINUTE = 10;    // messages per IP per minute
 const GLOBAL_PER_DAY = 300;      // hard ceiling on total messages per day
 
+// Live site knowledge — fetched and cached so new blog posts / projects
+// are picked up automatically, no redeploy needed.
+const SITE_ORIGINS = ['https://www.hectorhernandez.dev', 'https://hectorhernandez1.github.io'];
+const SITE_CACHE_KEY = 'site-content:v1';
+const SITE_CACHE_TTL = 21600;    // re-fetch the site every 6 hours
+const MAX_PAGE_CHARS = 6000;     // text kept per page
+const MAX_BLOG_POSTS = 15;       // newest-listed posts fetched from the blog index
+
 const SYSTEM_PROMPT = `You are the AI assistant on Hector Hernandez's portfolio website (hectorhernandez.dev). Visitors — usually recruiters and engineers — ask you questions about Hector. Answer in a friendly, professional tone using ONLY the facts below.
 
 ABOUT HECTOR
@@ -45,7 +53,8 @@ Resume PDF: https://www.hectorhernandez.dev/docs/Hector_Hernandez_Resume.pdf
 Email: hhhector9@gmail.com · LinkedIn: linkedin.com/in/hector-hernandez-55600191 · GitHub: github.com/HectorHernandez1
 
 RULES
-- Only answer questions about Hector, his work, skills, projects, or this website. For anything unrelated (general coding help, poems, news, etc.), politely decline in one sentence and steer back to Hector.
+- Only answer questions about Hector, his work, skills, projects, blog posts, or this website. For anything unrelated (general coding help, poems, news, etc.), politely decline in one sentence and steer back to Hector.
+- A "LIVE SITE CONTENT" section may follow with the current text of the website, including project descriptions and full blog posts — treat it as the most up-to-date source and use it to answer questions about projects and blog posts.
 - Keep answers under about 150 words. Plain text only, no markdown formatting.
 - If you don't know something about Hector, say so and point to the resume or contact section — never invent facts.
 - For hiring or collaboration inquiries, suggest the contact form or email.
@@ -122,6 +131,15 @@ export default {
             content: m.content.slice(0, MAX_MESSAGE_CHARS * 4), // belt-and-suspenders on old turns
         }));
 
+        const siteContent = await getSiteContent(env);
+        const today = new Date().toLocaleDateString('en-US', {
+            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'America/Phoenix',
+        });
+        let systemContent = `${SYSTEM_PROMPT}\n\nToday's date is ${today} (Arizona time). Use it when questions involve dates — e.g., whether Hector has graduated yet or how recent a blog post is.`;
+        if (siteContent) {
+            systemContent += `\n\nLIVE SITE CONTENT (auto-extracted from the website just now — current projects and blog posts):\n${siteContent}`;
+        }
+
         let upstream;
         try {
             upstream = await fetch(`${env.LLM_BASE_URL}/chat/completions`, {
@@ -132,7 +150,7 @@ export default {
                 },
                 body: JSON.stringify({
                     model: env.LLM_MODEL,
-                    messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...history],
+                    messages: [{ role: 'system', content: systemContent }, ...history],
                     max_tokens: MAX_OUTPUT_TOKENS,
                     temperature: 0.6,
                     stream: false,
@@ -157,6 +175,66 @@ export default {
         return json({ reply }, 200, origin);
     },
 };
+
+// Fetch the live site (homepage + every post linked from the blog index),
+// strip it to plain text, and cache it in KV. Cache misses add ~2s to one
+// request every SITE_CACHE_TTL; everything else reads the cached copy.
+async function getSiteContent(env) {
+    try {
+        const cached = await env.RATE_KV.get(SITE_CACHE_KEY);
+        if (cached) return cached;
+    } catch { /* fall through to fetch */ }
+
+    let content = '';
+    for (const site of SITE_ORIGINS) {
+        try {
+            const home = await fetchPageText(`${site}/`);
+            if (!home) continue;
+            content += `--- HOMEPAGE (about, skills, experience, projects) ---\n${home}\n`;
+
+            const blogRes = await fetch(`${site}/blog/`);
+            if (blogRes.ok) {
+                const blogHtml = await blogRes.text();
+                const links = [...new Set(
+                    [...blogHtml.matchAll(/href="([^"]*posts\/[^"]+\.html)"/g)].map(m => m[1])
+                )].slice(0, MAX_BLOG_POSTS);
+                for (const link of links) {
+                    const url = new URL(link, `${site}/blog/`).href;
+                    const text = await fetchPageText(url);
+                    if (text) content += `--- BLOG POST (${url}) ---\n${text}\n`;
+                }
+            }
+            break; // first origin that works is enough
+        } catch { /* try next origin */ }
+    }
+
+    if (content) {
+        try {
+            await env.RATE_KV.put(SITE_CACHE_KEY, content, { expirationTtl: SITE_CACHE_TTL });
+        } catch { /* caching is best-effort */ }
+    }
+    return content;
+}
+
+async function fetchPageText(url) {
+    const res = await fetch(url);
+    if (!res.ok) return '';
+    let html = await res.text();
+    html = html
+        .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+        .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+        .replace(/<nav[\s\S]*?<\/nav>/gi, ' ')
+        .replace(/<footer[\s\S]*?<\/footer>/gi, ' ');
+    const main = html.match(/<main[\s\S]*?<\/main>/i) || html.match(/<article[\s\S]*?<\/article>/i);
+    if (main) html = main[0];
+    const text = html
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"').replace(/&#39;|&apos;/g, "'").replace(/&nbsp;/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    return text.slice(0, MAX_PAGE_CHARS);
+}
 
 function corsHeaders(origin) {
     return {
