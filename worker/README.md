@@ -6,13 +6,19 @@ server-side and protects against abuse:
 
 - **CORS** locked to the site's origins (plus `localhost:8000` for dev)
 - **Per-IP limit:** 10 messages/minute
-- **Global daily cap:** 300 messages/day (hard cost ceiling ≈ $0.35/day worst case)
+- **Global daily cap:** 300 messages/day (hard cost ceiling)
 - **Input caps:** 500-char messages, 8 turns of history, 400 output tokens
 - System prompt is hardcoded server-side — visitors can't override it
 
-Provider is GLM-5.1 via Z.AI by default (OpenAI-compatible). Any OpenAI-compatible
-provider (DeepSeek, bigmodel.cn, etc.) works by editing the two `[vars]` in
-`wrangler.toml` and re-setting the secret.
+The bot grounds its answers in the live site: the Worker fetches the homepage
+(projects included) and every post linked from the blog index, strips them to
+plain text, and caches the result in KV for 6 hours. New blog posts and projects
+are picked up automatically — no redeploy needed. The current date is injected
+into the prompt on every request.
+
+Provider is GLM-5.1 (OpenAI-compatible endpoint). Any OpenAI-compatible
+provider works by editing the two `[vars]` in `wrangler.toml` and re-setting
+the secret.
 
 ## Deploy (one time)
 
