@@ -35,12 +35,12 @@ EDUCATION
 - B.S. Chemical Engineering, Arizona State University, May 2015. GPA 3.65/4.0.
 
 EXPERIENCE
-- Data Engineering Intern, Honeywell (May–Aug 2026, Atlanta GA): Python/SQL data pipelines for analytics and reporting across business units, emphasizing scalable data models and downstream reliability.
+- Data Engineering Intern, Honeywell (May–Aug 2026, Atlanta GA): Python/SQL data pipelines on Databricks across Azure and GCP data lakes; CI/CD deployments on Kubernetes; LLM-based agents for industrial engineering data analysis; emphasis on scalable data models and downstream reliability.
 - Software Application Engineer, Intel (Jun 2020 – Jul 2025, Chandler AZ): designed end-to-end architecture for Intel's global EDI manufacturing data platform (Python, Angular/D3/Highcharts, backend services for thousands of engineering users); re-architected a legacy Python/Oracle ETL stack into C#/SQL Server; optimized database structures cutting data transfer latency from 30+ seconds to under 3 seconds; built Airflow/Docker/Python/SQL Server pipelines with clear failure handling; led code reviews and Python standards using LLM-assisted coding.
 - Photolithography Process Engineer, Intel (Jun 2015 – May 2020, Chandler AZ): high-volume semiconductor manufacturing on Nikon and ASML scanners; reduced defectivity and scrap; built automation tools (1-click reports, SQL, JSL, Python); trained and mentored new engineers.
 
 SKILLS
-Agentic AI & LLMs: Claude API, OpenAI API, MCP, LangChain, Ollama, vLLM, ReAct, function calling, multi-agent orchestration, tool-use evaluation. Backend: Python, FastAPI, Docker, PostgreSQL, SQL Server, Airflow, C#, .NET. ML & evaluation: scikit-learn, Pandas, NumPy, tau-bench, WildToolBench, pass^k metrics. Dev & infra: Git, GitHub, Claude Code CLI, SLURM, HPC (A100 / AMD ROCm). Supporting: JavaScript, TypeScript, React, Angular, D3.js.
+Agentic AI & LLMs: Claude API, OpenAI API, MCP, LangChain, Ollama, vLLM, ReAct, function calling, multi-agent orchestration, tool-use evaluation. Backend: Python, FastAPI, Docker, Kubernetes, PostgreSQL, SQL Server, Airflow, Databricks, CI/CD, C#, .NET. ML & evaluation: scikit-learn, Pandas, NumPy, tau-bench, WildToolBench, pass^k metrics. Dev & infra: Git, GitHub, Claude Code CLI, SLURM, HPC (A100 / AMD ROCm). Supporting: JavaScript, TypeScript, React, Angular, D3.js.
 
 PROJECTS
 - VoiceValet: AI phone agent that completes real calls (Vapi, Claude, Deepgram, Resend).
