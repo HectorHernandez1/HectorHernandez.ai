@@ -1,0 +1,243 @@
+/* ============================================================
+   AI Chat Widget — "Ask me about Hector"
+   Standalone stylesheet; uses the design tokens from style.css
+   so light/dark theming works automatically.
+   ============================================================ */
+
+/* ---- Floating bubble ---- */
+.chat-bubble {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 1100;
+    width: 56px;
+    height: 56px;
+    border: none;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--accent-contrast);
+    font-size: 1.3rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.chat-bubble:hover {
+    transform: translateY(-2px) scale(1.05);
+}
+
+.chat-bubble .chat-icon-close { display: none; }
+.chat-bubble.open .chat-icon-open { display: none; }
+.chat-bubble.open .chat-icon-close { display: inline; }
+
+/* ---- Panel ---- */
+.chat-panel {
+    position: fixed;
+    right: 24px;
+    bottom: 92px;
+    z-index: 1100;
+    width: 380px;
+    max-width: calc(100vw - 48px);
+    height: 540px;
+    max-height: calc(100vh - 130px);
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(12px);
+    pointer-events: none;
+    transition: var(--transition);
+}
+
+.chat-panel.open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* ---- Header ---- */
+.chat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+    background: var(--surface-2);
+}
+
+.chat-header-title {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-strong);
+    margin: 0;
+}
+
+.chat-header-sub {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--muted);
+    margin: 2px 0 0;
+}
+
+.chat-close {
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+}
+
+.chat-close:hover {
+    color: var(--text);
+    background: var(--accent-soft);
+}
+
+/* ---- Messages ---- */
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chat-msg {
+    max-width: 85%;
+    padding: 10px 13px;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: var(--text);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.chat-msg.user {
+    align-self: flex-end;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+}
+
+.chat-msg.assistant {
+    align-self: flex-start;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+}
+
+.chat-msg.error {
+    align-self: flex-start;
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    color: var(--text);
+}
+
+/* Typing indicator */
+.chat-typing {
+    align-self: flex-start;
+    display: flex;
+    gap: 5px;
+    padding: 12px 14px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+}
+
+.chat-typing span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--muted);
+    animation: chat-blink 1.2s infinite ease-in-out;
+}
+
+.chat-typing span:nth-child(2) { animation-delay: 0.2s; }
+.chat-typing span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes chat-blink {
+    0%, 60%, 100% { opacity: 0.25; transform: translateY(0); }
+    30% { opacity: 1; transform: translateY(-3px); }
+}
+
+/* ---- Input ---- */
+.chat-form {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+    border-top: 1px solid var(--line);
+    background: var(--surface-2);
+}
+
+.chat-input {
+    flex: 1;
+    padding: 10px 12px;
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    outline: none;
+    transition: var(--transition);
+}
+
+.chat-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.chat-input::placeholder { color: var(--muted); }
+
+.chat-send {
+    border: none;
+    background: var(--accent);
+    color: var(--accent-contrast);
+    width: 40px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+.chat-send:hover:not(:disabled) { transform: translateY(-1px); }
+.chat-send:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.chat-disclaimer {
+    padding: 0 12px 10px;
+    margin: 0;
+    background: var(--surface-2);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    color: var(--muted);
+    text-align: center;
+}
+
+/* ---- Mobile ---- */
+@media (max-width: 600px) {
+    .chat-panel {
+        right: 12px;
+        left: 12px;
+        bottom: 86px;
+        width: auto;
+        max-width: none;
+        height: 72vh;
+    }
+
+    .chat-bubble {
+        right: 16px;
+        bottom: 16px;
+    }
+}

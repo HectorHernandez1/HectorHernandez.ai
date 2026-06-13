@@ -15,6 +15,7 @@ This is a modern, responsive portfolio website built with HTML5, CSS3, and JavaS
 - **Smooth Scrolling**: Navigation with active section highlighting
 - **Interactive Projects**: Showcase of backend engineering projects
 - **Contact Form**: Easy contact mechanism for recruiters and collaborators
+- **AI Chat**: Floating "Ask me about Hector" assistant (`js/chat.js` + `css/chat.css`), backed by a Cloudflare Worker proxy in `worker/` that holds the LLM API key and enforces abuse caps (10 msgs/min per IP, 300 msgs/day global) — see `worker/README.md`
 - **Performance Optimized**: Fast loading times and lazy loading images
 - **Accessible**: WCAG AA compliant with proper ARIA labels
 

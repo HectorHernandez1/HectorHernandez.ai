@@ -1,0 +1,22 @@
+name = "hector-chat-proxy"
+main = "src/index.js"
+compatibility_date = "2026-06-01"
+
+# Created with: wrangler kv namespace create RATE_KV
+# Paste the printed id below before deploying.
+[[kv_namespaces]]
+binding = "RATE_KV"
+id = "be503fa527f74e489d66ed61f5bf87e7"
+
+[vars]
+# Any OpenAI-compatible provider works — swap these two values (and re-set the secret).
+# Current key is a Z.AI GLM Coding Plan subscription, which only works on the
+# coding endpoint below. Other options:
+#   Z.AI pay-as-you-go: LLM_BASE_URL = "https://api.z.ai/api/paas/v4"
+#   bigmodel.cn:        LLM_BASE_URL = "https://open.bigmodel.cn/api/paas/v4"
+#   DeepSeek:           LLM_BASE_URL = "https://api.deepseek.com", LLM_MODEL = "deepseek-chat"
+LLM_BASE_URL = "https://api.z.ai/api/coding/paas/v4"
+LLM_MODEL = "glm-5.1"
+
+# The API key is NOT stored here. Set it with:
+#   wrangler secret put LLM_API_KEY
