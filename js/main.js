@@ -8,8 +8,8 @@
     const html = document.documentElement;
     const icon = themeToggle.querySelector('i');
 
-    const savedTheme = localStorage.getItem('theme');
-    const initial = savedTheme || html.getAttribute('data-theme') || 'dark';
+    // Always open in dark mode; toggle applies for the current session only.
+    const initial = 'dark';
     html.setAttribute('data-theme', initial);
     updateIcon(initial);
 
